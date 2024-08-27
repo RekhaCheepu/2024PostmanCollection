@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "8256cab7-34df-47da-9f55-6af4560e9e3c",
+		"name": "GetPutChaining",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37076008"
+	},
+	"item": [
+		{
+			"name": "1-GetUsers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const getResponse = pm.response.json();\r",
+							"\r",
+							"const userIds =  getResponse.map(user => user.id);//array\r",
+							"console.log(userIds);\r",
+							"\r",
+							"pm.variables.set(\"user_ids\", userIds);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "759f2fb1b4d862e0e254669319f30119ffc33d7409ac67ab68bf82588bc14504",
+						"description": "759f2fb1b4d862e0e254669319f30119ffc33d7409ac67ab68bf82588bc14504",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseURL}}/public/v2/users",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2-UpdateUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const userIds=pm.variables.get(\"user_ids\");\r",
+							"pm.variables.set(\"singleUserId\", userIds.shift());\r",
+							"if(Array.isArray(userIds)&&userIds.length>0){\r",
+							"    pm.execution.setNextRequest(\"2-UpdateUser\");\r",
+							"}\r",
+							"    else{\r",
+							"        console.log(\"all users are updated\");\r",
+							"        pm.execution.setNextRequest(null);\r",
+							"    \r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 759f2fb1b4d862e0e254669319f30119ffc33d7409ac67ab68bf82588bc14504",
+						"description": "Bearer 759f2fb1b4d862e0e254669319f30119ffc33d7409ac67ab68bf82588bc14504",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"Rekha\",\r\n    \"status\":\"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users/{{singleUserId}}",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users",
+						"{{singleUserId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

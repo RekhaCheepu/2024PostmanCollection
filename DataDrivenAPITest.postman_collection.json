@@ -1,0 +1,82 @@
+{
+	"info": {
+		"_postman_id": "a0ee4e70-ad98-480d-87c5-a15b17d7c989",
+		"name": "DataDrivenAPITest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37076008"
+	},
+	"item": [
+		{
+			"name": "2-CreateUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"user data is correct\",function(){\r",
+							"    const response= pm.response.json();\r",
+							"    pm.expect(response.name).to.equal(pm.iterationData.get(\"name\"));\r",
+							"    pm.expect(response.gender).to.equal(pm.iterationData.get(\"gender\"));\r",
+							"    pm.expect(response.status).to.equal(pm.iterationData.get(\"status\"));\r",
+							"    \r",
+							"    const rawBody=pm.request.body.raw;\r",
+							"   const requestBody= json.parse(rawBody);\r",
+							"   const email=requestBody.email;\r",
+							"   console.log(email);\r",
+							"   pm.expect(response.email).to.eql(email);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer 759f2fb1b4d862e0e254669319f30119ffc33d7409ac67ab68bf82588bc14504",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"{{name}}\",\r\n    \"gender\":\"{{gender}}\",\r\n    \"email\":\"{{$randomEmail}}\",\r\n    \"status\": \"{{status}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://gorest.co.in/public/v2/users",
+					"protocol": "https",
+					"host": [
+						"gorest",
+						"co",
+						"in"
+					],
+					"path": [
+						"public",
+						"v2",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
